@@ -1,3 +1,4 @@
+// Force rebuild
 import React from 'react';
 
 export default function Dashboard() {
@@ -42,7 +43,7 @@ export default function Dashboard() {
                 <div className="text-3xl font-bold">1,240</div>
                 <p className="text-xs text-rose-400 font-medium">360 pts to next level</p>
               </div>
-              <button className="text-rose-500 text-sm font-bold hover:underline">Shop &rarr;</button>
+              <button className="text-rose-500 text-sm font-bold hover:underline">Shop →</button>
             </div>
           </div>
 
@@ -84,7 +85,7 @@ export default function Dashboard() {
           </div>
 
           <div className="bg-gradient-to-br from-rose-500 to-purple-600 p-8 rounded-3xl text-white shadow-xl relative overflow-hidden group text-left">
-            <div className="absolute top-0 right-0 p-feat: enhance dashboard with streak, points, and memory wall4 opacity-20 transform translate-x-4 -translate-y-4 group-hover:translate-x-0 group-hover:translate-y-0 transition-transform">
+            <div className="absolute top-0 right-0 p-4 opacity-20 transform translate-x-4 -translate-y-4 group-hover:translate-x-0 group-hover:translate-y-0 transition-transform">
               <span className="text-8xl">✨</span>
             </div>
             <div className="relative z-10">
