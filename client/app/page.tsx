@@ -1,9 +1,78 @@
-// Force rebuild
-import React from 'react';
+'use client';
+
+import React, { useState } from 'react';
 
 export default function Dashboard() {
+  const [showMemoryModal, setShowMemoryModal] = useState(false);
+  const [showQuestModal, setShowQuestModal] = useState(false);
+  const [streak, setStreak] = useState(12);
+  const [points, setPoints] = useState(1240);
+  const [memories, setMemories] = useState([
+    { id: 1, title: 'Beach Trip', status: 'Coming Soon' },
+    { id: 2, title: 'First Dinner', status: 'Coming Soon' }
+  ]);
+
+  const handleNewMemory = () => {
+    setShowMemoryModal(true);
+  };
+
+  const handleQuestComplete = () => {
+    setPoints(points + 100);
+    setStreak(streak + 1);
+    setShowQuestModal(true);
+    setTimeout(() => setShowQuestModal(false), 3000);
+  };
+
+  const handleShop = () => {
+    alert('Shop feature coming soon! 🛍️');
+  };
+
+  const handleViewAll = () => {
+    alert('View all memories - Feature coming soon! 📸');
+  };
+
   return (
     <div className="min-h-screen bg-rose-50 font-sans text-gray-900">
+      {showQuestModal && (
+        <div className="fixed top-20 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-8 py-4 rounded-full shadow-lg z-50 animate-bounce">
+          🎉 Quest Completed! +100 Points!
+        </div>
+      )}
+
+      {showMemoryModal && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onClick={() => setShowMemoryModal(false)}>
+          <div className="bg-white rounded-3xl p-8 max-w-md w-full" onClick={(e) => e.stopPropagation()}>
+            <h3 className="text-2xl font-bold mb-4 text-gray-800">📸 Add New Memory</h3>
+            <input 
+              type="text" 
+              placeholder="Memory title"
+              className="w-full px-4 py-3 border-2 border-rose-100 rounded-xl mb-4 focus:border-rose-400 focus:outline-none"
+            />
+            <textarea 
+              placeholder="Describe this special moment..."
+              className="w-full px-4 py-3 border-2 border-rose-100 rounded-xl mb-4 h-32 focus:border-rose-400 focus:outline-none"
+            />
+            <div className="flex gap-4">
+              <button 
+                onClick={() => {
+                  setMemories([...memories, { id: Date.now(), title: 'New Memory', status: 'Added!' }]);
+                  setShowMemoryModal(false);
+                }}
+                className="flex-1 bg-rose-500 text-white py-3 rounded-xl font-bold hover:bg-rose-600 transition"
+              >
+                Save Memory
+              </button>
+              <button 
+                onClick={() => setShowMemoryModal(false)}
+                className="flex-1 bg-gray-200 text-gray-700 py-3 rounded-xl font-bold hover:bg-gray-300 transition"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <header className="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-rose-100 p-4">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-2">
@@ -17,7 +86,10 @@ export default function Dashboard() {
               <div className="w-8 h-8 rounded-full bg-rose-200 border-2 border-white flex items-center justify-center text-xs text-rose-700 font-bold">A</div>
               <div className="w-8 h-8 rounded-full bg-purple-200 border-2 border-white flex items-center justify-center text-xs text-purple-700 font-bold">B</div>
             </div>
-            <button className="bg-rose-500 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-rose-600 transition shadow-lg shadow-rose-200">
+            <button 
+              onClick={handleNewMemory}
+              className="bg-rose-500 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-rose-600 transition shadow-lg shadow-rose-200 active:scale-95"
+            >
               New Memory
             </button>
           </div>
@@ -30,7 +102,7 @@ export default function Dashboard() {
             <h2 className="text-lg font-bold mb-4 flex items-center gap-2 text-rose-600">
               <span>🔥</span> Our Streak
             </h2>
-            <div className="text-5xl font-black text-rose-500 mb-2">12 Days</div>
+            <div className="text-5xl font-black text-rose-500 mb-2">{streak} Days</div>
             <p className="text-sm text-gray-500 leading-relaxed">You're doing great! Complete 3 more tasks to reach your 15-day milestone and unlock a special reward.</p>
           </div>
 
@@ -40,10 +112,15 @@ export default function Dashboard() {
             </h2>
             <div className="flex justify-between items-end">
               <div>
-                <div className="text-3xl font-bold">1,240</div>
-                <p className="text-xs text-rose-400 font-medium">360 pts to next level</p>
+                <div className="text-3xl font-bold">{points.toLocaleString()}</div>
+                <p className="text-xs text-rose-400 font-medium">{1600 - points} pts to next level</p>
               </div>
-              <button className="text-rose-500 text-sm font-bold hover:underline">Shop →</button>
+              <button 
+                onClick={handleShop}
+                className="text-rose-500 text-sm font-bold hover:underline cursor-pointer"
+              >
+                Shop →
+              </button>
             </div>
           </div>
 
@@ -51,7 +128,7 @@ export default function Dashboard() {
             <h2 className="text-lg font-bold mb-4 flex items-center gap-2 text-rose-600">
               <span>📅</span> Next Date
             </h2>
-            <div className="flex items-center gap-4 p-3 bg-rose-50 rounded-2xl border border-rose-100">
+            <div className="flex items-center gap-4 p-3 bg-rose-50 rounded-2xl border border-rose-100 hover:bg-rose-100 transition cursor-pointer">
               <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-xl shadow-sm">🏠</div>
               <div>
                 <p className="font-bold text-gray-800">Home Movie Night</p>
@@ -67,19 +144,28 @@ export default function Dashboard() {
               <h2 className="text-xl font-bold flex items-center gap-2">
                 <span>📸</span> Memory Wall
               </h2>
-              <button className="text-rose-500 text-sm font-bold hover:underline">View All</button>
+              <button 
+                onClick={handleViewAll}
+                className="text-rose-500 text-sm font-bold hover:underline cursor-pointer"
+              >
+                View All
+              </button>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="aspect-video bg-rose-50 rounded-2xl overflow-hidden relative group cursor-pointer border-2 border-dashed border-rose-100 hover:border-rose-300 transition-all flex flex-col items-center justify-center">
-                <span className="text-rose-200 font-bold uppercase tracking-widest text-xs">Beach Trip</span>
-                <span className="text-[10px] text-rose-200">Coming Soon</span>
-              </div>
-              <div className="aspect-video bg-purple-50 rounded-2xl overflow-hidden relative group cursor-pointer border-2 border-dashed border-purple-100 hover:border-purple-300 transition-all flex flex-col items-center justify-center">
-                <span className="text-purple-200 font-bold uppercase tracking-widest text-xs">First Dinner</span>
-                <span className="text-[10px] text-purple-200">Coming Soon</span>
-              </div>
+              {memories.map((memory) => (
+                <div 
+                  key={memory.id}
+                  className="aspect-video bg-rose-50 rounded-2xl overflow-hidden relative group cursor-pointer border-2 border-dashed border-rose-100 hover:border-rose-300 transition-all flex flex-col items-center justify-center hover:scale-105"
+                >
+                  <span className="text-rose-400 font-bold uppercase tracking-widest text-xs">{memory.title}</span>
+                  <span className="text-[10px] text-rose-300">{memory.status}</span>
+                </div>
+              ))}
             </div>
-            <button className="w-full mt-6 py-4 rounded-2xl border-2 border-dashed border-rose-200 text-rose-400 font-bold hover:bg-rose-50 hover:border-rose-300 transition-all active:scale-[0.98]">
+            <button 
+              onClick={handleNewMemory}
+              className="w-full mt-6 py-4 rounded-2xl border-2 border-dashed border-rose-200 text-rose-400 font-bold hover:bg-rose-50 hover:border-rose-300 transition-all active:scale-[0.98] cursor-pointer"
+            >
               + Post New Shared Moment
             </button>
           </div>
@@ -98,7 +184,10 @@ export default function Dashboard() {
                   <span className="bg-white/20 backdrop-blur-sm px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider">+100 Pts</span>
                   <span className="bg-white/20 backdrop-blur-sm px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider">Relationship Goal</span>
                 </div>
-                <button className="bg-white text-rose-600 px-8 py-3 rounded-full font-black text-sm uppercase tracking-widest shadow-lg hover:bg-rose-50 active:scale-95 transition-all">
+                <button 
+                  onClick={handleQuestComplete}
+                  className="bg-white text-rose-600 px-8 py-3 rounded-full font-black text-sm uppercase tracking-widest shadow-lg hover:bg-rose-50 active:scale-95 transition-all cursor-pointer"
+                >
                   I Done It!
                 </button>
               </div>
